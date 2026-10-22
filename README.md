@@ -41,6 +41,22 @@ A reference implementation (`recall_once.py`) is included.
 Copy this directory into your DSH plugins folder, then enable it in
 `cordis.patch.yml`.
 
+
+## Provenance & Takedown
+
+This repository is a collection of utilities and notes accumulated over time.
+Some code or ideas may share ancestry with projects we have read, used, or been
+inspired by — inevitably so, and we cannot always reconstruct the exact
+provenance of every line. Where a source is known, it is credited
+(see Acknowledgements).
+
+If you believe material here reproduces your work without attribution or
+permission, please open an issue or contact the maintainer. We will verify the
+claim and then either add proper attribution, obtain a license, or remove the
+affected material promptly. We would rather take it down than misattribute it.
+
+- Issues: <https://github.com/xiyaosuimeng/dsh-recall/issues>
+
 ## License
 
 MIT
