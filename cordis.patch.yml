@@ -1,0 +1,37 @@
+# dsh-recall 的 bundle patch。
+#
+# ⚠️ 这是"**每轮都跑**"的插件，改之前先读 README 的设计红线。三层安全阀：
+#   ① `dryRun: true`（**默认**）= 只写日志，**不碰消息** —— 先这样跑一阵，看判准对不对
+#   ② `enabled: false` = 整个插件不生效
+#   ③ 检索器（tools\recall_once.py）自己有阈值/条数/长度上限，不达标就什么都不返回
+- insert:
+    - id: recall
+      name: dsh-recall
+      config:
+        # 总开关
+        enabled: true
+        # ★★ 2026-10-21 23:3x 他授权开真注入（"开做吧"）：
+        #    dryRun 期间 120 次检查 / 0 命中 —— 判准没被检验过，所以先补了记忆再开。
+        #    异常一律 fail-open（放行），不连累对话；要退回改回 true + 重启。
+        # ★ 2026-10-22 改注入方式：不再追加到他那条 user 消息的 content 末尾，
+        #    改成**追加一条独立消息**（source.kind=dsh-recall，自己带 id）。
+        #    他的原话一个字节都不改 —— 这是他当天提的要求。改完必须**重启 DSH** 才生效。
+        dryRun: false
+        # 用哪个 python / 哪个检索器
+        python: 'python'
+        script: 'recall_once.py'
+        # 检索超时（毫秒）；超了就放行，不阻塞对话
+        timeoutMs: 8000
+        # 太短的消息不值得检索（"嗯"、"好"、"继续"）
+        minQueryLen: 6
+        # ★★ 2026-10-22 新增：**动作触发**（他点名要的）
+        #   原话：「我不需要我说到时你想起来，而是你做这件事的时候自己回想起来，
+        #          是在我没说的时候想起相关事件」。
+        #   以前检索词只有他这句话 ⇒ 他说"检查一下"就什么都撞不到；
+        #   现在把「最近一次工具动作」也当检索词（工具名 + 参数/命令/路径 + 结果片段）。
+        actionTrigger: true
+        # 先只写日志、不真注入（观察一阵确认不吵；觉得可以就改 false 再重启）
+        actionDryRun: true
+        # 防噪音：最小间隔 + 每轮最多注入几条
+        actionMinIntervalMs: 12000
+        actionMaxPerTurn: 3

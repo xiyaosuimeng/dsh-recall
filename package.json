@@ -1,0 +1,14 @@
+{
+  "name": "dsh-recall",
+  "version": "0.1.0",
+  "description": "每轮自动把相关的旧记忆追加到消息尾巴（不碰系统提示，保前缀缓存）；默认 dryRun",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "files": ["index.js", "cordis.patch.yml", "README.md"],
+  "keywords": ["dsh-plugin", "deepseek-harness", "memory", "recall", "rag"],
+  "license": "MIT",
+  "dsh": {
+    "bundle": { "patch": "./cordis.patch.yml" }
+  }
+}
